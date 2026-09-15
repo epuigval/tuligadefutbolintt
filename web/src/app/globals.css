@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f8ef;
+  --foreground: #12221b;
+  --card: #fffef7;
+  --accent: #0b8a61;
+  --accent-2: #f2b634;
+  --muted: #e4e7d8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-plex-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-space-grotesk), "Segoe UI", sans-serif;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid color-mix(in oklab, var(--accent) 18%, white);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(18, 34, 27, 0.06);
+}
+
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 0.6rem 0.9rem;
+  transition: all 0.16s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #f6fff9;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-secondary {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.btn-secondary:hover {
+  filter: brightness(0.96);
+}
+
+.table-bg {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(11, 138, 97, 0.14), transparent 42%),
+    radial-gradient(circle at 90% 10%, rgba(242, 182, 52, 0.15), transparent 35%),
+    linear-gradient(170deg, #f7f8ef 0%, #edf2df 100%);
+}
