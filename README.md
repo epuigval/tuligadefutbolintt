@@ -41,6 +41,26 @@ npm run dev
 
 Abrir http://localhost:3000
 
+## Pruebas E2E con Playwright
+
+Comandos principales:
+
+```bash
+npm run test:e2e
+npm run test:e2e:ui
+npm run test:e2e:headed
+```
+
+Si es la primera ejecucion, instala Chromium para Playwright:
+
+```bash
+npx playwright install chromium
+```
+
+Nota para entornos corporativos (proxy/certificados):
+- Si falla la descarga del navegador con errores TLS/certificado, configura el certificado raiz corporativo en Node antes de ejecutar `playwright install`.
+- En CI (GitHub Actions), el workflow ya instala navegador y dependencias automaticamente.
+
 ## Flujo de uso
 1. Elegir jugador en "Quien eres?"
 2. Marcar disponibilidad (L-V)
