@@ -1,62 +1,204 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f8ef;
-  --foreground: #12221b;
-  --card: #fffef7;
-  --accent: #0b8a61;
-  --accent-2: #f2b634;
-  --muted: #e4e7d8;
+  --sky: #3b82f6;
+  --sky-bright: #60a5fa;
+  --sky-deep: #1d4ed8;
+  --sky-soft: #dbeafe;
+  --sun: #fbbf24;
+  --sun-bright: #fcd34d;
+  --sun-deep: #d97706;
+  --leaf: #22c55e;
+  --leaf-soft: #dcfce7;
+  --leaf-deep: #16a34a;
+  --coral: #f87171;
+  --coral-soft: #fee2e2;
+  --berry: #a855f7;
+  --background: #ffffff;
+  --surface: #f8fafc;
+  --surface-elevated: #ffffff;
+  --surface-sunken: #f1f5f9;
+  --ink: #0f172a;
+  --ink-muted: #475569;
+  --ink-subtle: #94a3b8;
+  --ink-faint: #cbd5e1;
+  --outline: #e2e8f0;
+  --outline-strong: #94a3b8;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-space-grotesk);
-  --font-mono: var(--font-plex-mono);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-atkinson);
+  --font-mono: var(--font-jetbrains);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-space-grotesk), "Segoe UI", sans-serif;
+  color: var(--ink);
+  font-family: var(--font-atkinson), "Segoe UI", sans-serif;
+  font-size: 18px;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  text-rendering: optimizeLegibility;
 }
 
 .card {
-  background: var(--card);
-  border: 1px solid color-mix(in oklab, var(--accent) 18%, white);
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(18, 34, 27, 0.06);
+  background: var(--surface-elevated);
+  border: 1px solid var(--outline);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  transition:
+    transform 240ms var(--ease-out),
+    box-shadow 240ms var(--ease-out),
+    border-color 240ms var(--ease-out);
 }
 
 .btn {
-  border-radius: 10px;
+  min-height: 56px;
+  border-radius: 16px;
   font-weight: 600;
-  padding: 0.6rem 0.9rem;
-  transition: all 0.16s ease;
+  font-size: 20px;
+  line-height: 1.2;
+  padding: 0.75rem 1.2rem;
+  transition:
+    transform 160ms var(--ease-out),
+    filter 180ms var(--ease-out),
+    background-color 180ms var(--ease-out),
+    color 180ms var(--ease-out),
+    border-color 180ms var(--ease-out);
+}
+
+.btn:active {
+  transform: scale(0.97);
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: #f6fff9;
+  background: var(--sky);
+  color: var(--surface-elevated);
+  border: 1px solid var(--sky);
 }
 
 .btn-primary:hover {
-  filter: brightness(1.05);
+  background: var(--sky-deep);
+  border-color: var(--sky-bright);
 }
 
 .btn-secondary {
-  background: var(--muted);
-  color: var(--foreground);
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--outline);
 }
 
 .btn-secondary:hover {
-  filter: brightness(0.96);
+  background: var(--sky-soft);
+  border-color: var(--sky);
 }
 
 .table-bg {
   background:
-    radial-gradient(circle at 10% 20%, rgba(11, 138, 97, 0.14), transparent 42%),
-    radial-gradient(circle at 90% 10%, rgba(242, 182, 52, 0.15), transparent 35%),
-    linear-gradient(170deg, #f7f8ef 0%, #edf2df 100%);
+    radial-gradient(circle at 12% 14%, color-mix(in oklab, var(--sky) 22%, transparent) 0%, transparent 42%),
+    radial-gradient(circle at 88% 12%, color-mix(in oklab, var(--sun) 24%, transparent) 0%, transparent 38%),
+    radial-gradient(circle at 50% 100%, color-mix(in oklab, var(--leaf) 14%, transparent) 0%, transparent 46%),
+    linear-gradient(180deg, var(--background) 0%, color-mix(in oklab, var(--surface) 72%, var(--background)) 100%);
+}
+
+.headline-display {
+  font-family: var(--font-hubot), var(--font-atkinson), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.badge-soft {
+  border-radius: 999px;
+  border: 1px solid var(--outline);
+  background: var(--surface-elevated);
+  color: var(--ink-muted);
+}
+
+.status-good {
+  background: var(--leaf-soft);
+  color: var(--leaf-deep);
+  border: 1px solid color-mix(in oklab, var(--leaf) 45%, var(--outline));
+}
+
+.status-warn {
+  background: color-mix(in oklab, var(--sun) 18%, var(--surface-elevated));
+  color: var(--sun-deep);
+  border: 1px solid color-mix(in oklab, var(--sun) 42%, var(--outline));
+}
+
+.field,
+.select-field {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--outline);
+  background: var(--surface-elevated);
+  color: var(--ink);
+  padding: 0.9rem 1rem;
+  font-size: 18px;
+  line-height: 1.4;
+  transition:
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
+}
+
+.field:focus,
+.select-field:focus {
+  outline: none;
+  border-color: var(--sky);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--sky-soft) 82%, transparent);
+}
+
+.weekday-chip {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  gap: 0.65rem;
+  border-radius: 12px;
+  border: 1px solid var(--outline);
+  background: var(--surface-elevated);
+  padding: 0.7rem 0.8rem;
+  color: var(--ink);
+  transition:
+    border-color 180ms var(--ease-out),
+    background-color 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+.weekday-chip:has(input:checked) {
+  border-color: var(--leaf);
+  background: var(--leaf-soft);
+}
+
+.weekday-chip:hover {
+  transform: translateY(-2px);
+}
+
+.matches-list li {
+  border-radius: 16px;
+  border: 1px solid var(--outline);
+  background: var(--surface-elevated);
+  padding: 0.9rem;
+}
+
+::selection {
+  background: var(--sky-soft);
+  color: var(--sky-deep);
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  .btn {
+    font-size: 18px;
+  }
 }

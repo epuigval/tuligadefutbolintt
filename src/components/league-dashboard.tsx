@@ -71,6 +71,9 @@ export default function LeagueDashboard({ initialData }: Props) {
   const [error, setError] = useState<string | null>(initialData.error);
 
   const allSubmitted = totalPlayers > 0 && submittedAvailabilities >= totalPlayers;
+  const progressPercent = totalPlayers === 0
+    ? 0
+    : Math.min(100, Math.round((submittedAvailabilities / totalPlayers) * 100));
   const selectedPlayer = useMemo(
     () => players.find((p) => p.id === selectedPlayerId) ?? null,
     [players, selectedPlayerId],
@@ -254,30 +257,38 @@ export default function LeagueDashboard({ initialData }: Props) {
   }
 
   return (
-    <main className="table-bg min-h-screen px-4 py-10">
-      <section className="mx-auto flex w-full max-w-5xl flex-col gap-6">
-        <header className="card p-6">
-          <p className="text-sm font-medium uppercase tracking-[0.18em] text-[#0b8a61]">
-            Liga Interna
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-            Futbolin NTT DATA
-          </h1>
-          <p className="mt-3 text-sm text-[#2c4a3d]">
-            Seleccion de identidad sin login, disponibilidad quincenal y
-            generacion de enfrentamientos por posiciones (delantero/defensa).
-          </p>
+    <main className="table-bg min-h-screen px-4 py-8 md:px-6 md:py-10">
+      <section className="mx-auto flex w-full max-w-6xl flex-col gap-6">
+        <header className="card overflow-hidden p-0">
+          <div className="bg-[var(--sky)] px-6 py-4 text-[var(--surface-elevated)] md:px-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em]">
+              Liga Interna
+            </p>
+            <h1 className="headline-display mt-2 text-4xl font-bold leading-tight md:text-5xl">
+              Futbolin NTT DATA
+            </h1>
+          </div>
+          <div className="grid gap-4 px-6 py-5 md:grid-cols-[1.3fr_1fr] md:px-8 md:py-6">
+            <p className="text-[var(--ink-muted)]">
+              Seleccion de identidad sin login, disponibilidad quincenal y
+              generacion de enfrentamientos por posiciones (delantero/defensa).
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div className="badge-soft px-3 py-2 text-center">Round readiness</div>
+              <div className="badge-soft px-3 py-2 text-center">Fair pairing</div>
+            </div>
+          </div>
         </header>
 
         <section className="grid gap-6 md:grid-cols-2">
-          <article className="card p-5">
-            <h2 className="text-xl font-semibold">Quien eres?</h2>
-            <p className="mt-1 text-sm text-[#416456]">
+          <article className="card p-5 md:p-6">
+            <h2 className="headline-display text-2xl font-bold">Quien eres?</h2>
+            <p className="mt-2 text-[var(--ink-muted)]">
               Elige tu nombre para operar en la app.
             </p>
 
             <select
-              className="mt-4 w-full rounded-lg border border-[#bdd4c8] bg-white p-2.5"
+              className="select-field mt-4"
               value={selectedPlayerId ?? ""}
               onChange={(event) => {
                 const value = Number(event.target.value);
@@ -298,47 +309,56 @@ export default function LeagueDashboard({ initialData }: Props) {
               ))}
             </select>
 
-            <p className="mt-3 text-sm text-[#416456]">
+            <p className="mt-4 rounded-xl bg-[var(--surface)] px-3 py-2 text-sm text-[var(--ink-muted)]">
               Jugador activo: {selectedPlayer?.alias ?? selectedPlayer?.name ?? "-"}
             </p>
           </article>
 
-          <article className="card p-5">
-            <h2 className="text-xl font-semibold">Jornada Actual</h2>
+          <article className="card p-5 md:p-6">
+            <h2 className="headline-display text-2xl font-bold">Jornada Actual</h2>
             {round ? (
-              <div className="mt-2 text-sm text-[#2c4a3d]">
+              <div className="mt-3 space-y-3 text-[var(--ink-muted)]">
                 <p>
                   Jornada {round.number}: {round.start_date} a {round.end_date}
                 </p>
-                <p className="mt-1">
+                <p>
                   Disponibilidades: {submittedAvailabilities}/{totalPlayers}
                 </p>
-                <p className="mt-1 font-medium">
+
+                <div className="h-2.5 overflow-hidden rounded-full bg-[var(--sky-soft)]">
+                  <div
+                    className="h-full rounded-full bg-[var(--leaf)] transition-[width] duration-500 ease-out"
+                    style={{ width: `${progressPercent}%` }}
+                  />
+                </div>
+
+                <p
+                  className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${
+                    allSubmitted ? "status-good" : "status-warn"
+                  }`}
+                >
                   {allSubmitted
                     ? "Todos listos: ya se pueden generar partidos."
                     : "Pendiente: faltan jugadores por informar disponibilidad."}
                 </p>
               </div>
             ) : (
-              <p className="mt-2 text-sm text-[#2c4a3d]">
+              <p className="mt-3 text-[var(--ink-muted)]">
                 No hay jornada activa. Crea la siguiente desde el panel admin.
               </p>
             )}
           </article>
         </section>
 
-        <section className="card p-5">
-          <h2 className="text-xl font-semibold">Disponibilidad (2 semanas)</h2>
-          <p className="mt-1 text-sm text-[#416456]">
+        <section className="card p-5 md:p-6">
+          <h2 className="headline-display text-2xl font-bold">Disponibilidad (2 semanas)</h2>
+          <p className="mt-2 text-[var(--ink-muted)]">
             Marca los dias que bajas a la oficina para esta jornada.
           </p>
 
-          <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-5">
+          <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-5 md:gap-4">
             {WEEKDAYS.map((day) => (
-              <label
-                key={day}
-                className="flex items-center gap-2 rounded-lg border border-[#c2d8cd] bg-white p-2"
-              >
+              <label key={day} className="weekday-chip">
                 <input
                   type="checkbox"
                   checked={availabilityDays.has(day)}
@@ -349,7 +369,7 @@ export default function LeagueDashboard({ initialData }: Props) {
             ))}
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap gap-3">
             <button
               className="btn btn-primary"
               disabled={loading}
@@ -371,21 +391,21 @@ export default function LeagueDashboard({ initialData }: Props) {
           </div>
         </section>
 
-        <section className="card p-5">
-          <h2 className="text-xl font-semibold">Panel Admin (sin login)</h2>
-          <p className="mt-1 text-sm text-[#416456]">
+        <section className="card p-5 md:p-6">
+          <h2 className="headline-display text-2xl font-bold">Panel Admin (sin login)</h2>
+          <p className="mt-2 text-[var(--ink-muted)]">
             Usa la clave ADMIN_ACTION_KEY para crear jornada y generar emparejamientos.
           </p>
 
           <input
-            className="mt-3 w-full rounded-lg border border-[#bdd4c8] bg-white p-2.5 font-mono text-sm"
+            className="field mt-4 font-mono"
             type="password"
             value={adminKey}
             onChange={(event) => setAdminKey(event.target.value)}
             placeholder="ADMIN_ACTION_KEY"
           />
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-wrap gap-3">
             <button
               className="btn btn-secondary"
               disabled={loading}
@@ -407,21 +427,21 @@ export default function LeagueDashboard({ initialData }: Props) {
           </div>
         </section>
 
-        <section className="card p-5">
-          <h2 className="text-xl font-semibold">Partidos de la jornada</h2>
+        <section className="card p-5 md:p-6">
+          <h2 className="headline-display text-2xl font-bold">Partidos de la jornada</h2>
           {matches.length === 0 ? (
-            <p className="mt-2 text-sm text-[#416456]">Sin partidos generados todavia.</p>
+            <p className="mt-3 text-[var(--ink-muted)]">Sin partidos generados todavia.</p>
           ) : (
-            <ul className="mt-3 grid gap-3">
+            <ul className="matches-list mt-4 grid gap-3">
               {matches.map((match) => (
-                <li key={match.id} className="rounded-xl border border-[#c2d8cd] bg-white p-3">
-                  <p className="text-xs font-mono text-[#45695b]">
+                <li key={match.id}>
+                  <p className="font-mono text-sm text-[var(--ink-subtle)]">
                     {new Date(match.scheduledAt).toLocaleString("es-ES")} · {match.status}
                   </p>
-                  <p className="mt-1 text-sm">
+                  <p className="mt-2 text-[var(--ink)]">
                     Equipo A: {formatPlayer(match.teamA.forward)} (Del.) + {formatPlayer(match.teamA.defense)} (Def.)
                   </p>
-                  <p className="text-sm">
+                  <p className="text-[var(--ink)]">
                     Equipo B: {formatPlayer(match.teamB.forward)} (Del.) + {formatPlayer(match.teamB.defense)} (Def.)
                   </p>
                 </li>
@@ -431,10 +451,14 @@ export default function LeagueDashboard({ initialData }: Props) {
         </section>
 
         {message ? (
-          <p className="card border-l-4 border-l-[#0b8a61] p-3 text-sm">{message}</p>
+          <p className="card border border-[var(--leaf)] bg-[var(--leaf-soft)] p-3 text-[var(--leaf-deep)]">
+            {message}
+          </p>
         ) : null}
         {error ? (
-          <p className="card border-l-4 border-l-[#ba3939] p-3 text-sm text-[#7a2020]">{error}</p>
+          <p className="card border border-[var(--coral)] bg-[var(--coral-soft)] p-3 text-[var(--ink)]">
+            {error}
+          </p>
         ) : null}
       </section>
     </main>
